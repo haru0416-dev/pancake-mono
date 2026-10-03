@@ -1,0 +1,19 @@
+name: 字形・収録字の要望
+description: 足りない字、形を変えてほしい字、追加してほしい切り替え機能
+labels: [glyph]
+body:
+  - type: textarea
+    id: chars
+    attributes:
+      label: 対象の字
+      description: 字そのものと、分かればコードポイント(U+XXXX)
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 要望と、それが要る場面
+      description: どんな文章やコードで困っているか。参考になる字形があれば画像も
+    validations:
+      required: true

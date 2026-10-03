@@ -1,0 +1,18 @@
+name: 使い方の質問
+description: インストールやエディタでの設定など
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: 先に README の「使い方」と「字形の切り替え」を見てください。
+  - type: input
+    id: env
+    attributes:
+      label: OS とアプリ
+      placeholder: Windows 11 / VS Code など
+  - type: textarea
+    id: question
+    attributes:
+      label: 質問
+    validations:
+      required: true

@@ -1,0 +1,127 @@
+# 等幅版のファミリー名(NF 版・JPDOC 版はこれに " NF" / " JPDOC" を付ける)
+family = "Pancake Mono"
+# プロポーショナル版のファミリー名
+prop_family = "Pancake Sans"
+# name テーブルに入れる説明とプロジェクトの URL
+description = "A rounded Japanese-English monospace font for programming, merging Maple Mono and Kiwi Maru"
+prop_description = "A rounded Japanese-English proportional font for prose, merging Maple Mono and Kiwi Maru"
+url = "https://github.com/haru0416-dev/pancake-mono"
+# バージョンは pyproject.toml の [project] version に書く
+
+# Maple Mono のウェイト -> Kiwi Maru のウェイト
+[weights]
+Thin = "Light"
+ExtraLight = "Light"
+Light = "Light"
+Regular = "Regular"
+Medium = "Medium"
+SemiBold = "Medium"
+Bold = "Medium"
+ExtraBold = "Medium"
+
+# 和文の線の太さを Maple の8ウェイトに合わせて、Kiwi の輪郭を太らせる/細らせる
+[weight_match]
+enabled = true
+# 太いウェイトで字の内側の白を残すため、字面に占めるインクの割合が dense_from から dense_to にかけて、
+# ずらし量を dense_max_offset まで下げる(負なら、もっとも混んだ字は土台より細くする)。
+# インクの割合の目安(Kiwi Medium を 1.1 倍した字): 日 0.23、語 0.41、機 0.45、鬱など画数の多い字 0.42〜0.52
+dense_from = 0.38
+dense_to = 0.47
+dense_max_offset = -3
+
+[mono]
+half = 600
+full = 1200
+# 和文の仮想ボディ中心(Kiwi は 380)を合わせる高さ。Maple の大文字の中心付近
+center_y = 370
+# 字種ごとの拡大率。Kiwi はかなが小さめなので、かなを少し大きくして英字と釣り合わせる
+scale_kanji = 1.10
+scale_kana = 1.16
+scale_other = 1.10
+# 全角の括弧・句読点を片側へ寄せるときの、セルの端からの余白
+fw_punct_margin = 150
+# Maple Mono Italic と同じ傾き(度)
+italic_angle = 10.0
+
+# 紛らわしい字の区別(既定で有効)
+[distinguish]
+# 長音「ー」を横方向に縮めて、漢数字「一」と区別する
+long_vowel_x = 0.82
+# カタカナ「ヘベペ」を細く高くして、ひらがな「へべぺ」と区別する
+he_x = 0.86
+he_y = 1.10
+# cv92: 漢字と紛らわしいカタカナをさらに小さくする
+strong_scale = 0.88
+strong_chars = "カロエニハタトヘベペ"
+
+# 全角スペースの可視化: 角丸の枠に沿って丸い点を並べる
+[ideographic_space]
+# 和文ボディ(1000 x scale_kanji)に対する枠の大きさ
+size = 0.80
+radius = 0.28
+dots = 12
+dot = { Light = 80, Regular = 96, Medium = 116 }
+
+# プロポーショナル版
+[prop]
+# 英字: 輪郭から測った「見かけの余白」がこの値になるよう左右のサイドベアリングを決める
+latin_sb = 58
+# 輪郭の凹みをどこまで余白として数えるか(測定域の高さに対する比)
+depth_limit = 0.2
+min_sb = 6
+space = 280
+tabular_digits = true
+# 和文: 漢字と全角英数記号の幅。かな・約物は字面 + 左右の余白。
+# 漢字の字面の幅は中央値 940・最大 1011 なので、1040 にすると漢字どうしのすき間がかなどうしに近くなる
+full = 1040
+kana_sb = 42
+# 濁点付きのかなで、濁点の張り出しを字幅に含める割合
+dakuten_width = 0.7
+punct_sb = 36
+# 全角の ！？＃ などの左右の余白
+fw_punct_sb = 90
+
+# 濁点・半濁点を大きくする(cv94 で元の大きさに戻す)
+[dakuten]
+scale = 1.28
+
+# 記号の幅: 等幅版は East Asian Width が曖昧(A)な記号をすべて半角、JPDOC 版はすべて全角にそろえる。
+# かわいい記号(scripts/symbols.py の SYMBOLS)は Maple の線幅で描き直す
+[symbols]
+half_radius = 300
+# 半角の記号は小さいので線を少し細くする
+half_stroke = 0.82
+half_center_y = 360
+full_radius = 470
+# Kiwi にしか無い曖昧幅の記号を半角に収めるときの最大の字面幅
+half_fit = 540
+
+# Texture Healing / Smart Kerning(等幅版の calt)
+# 細い字の隣の広い字は細い字の側へ広がり、細い字は離れる。
+# 広い字と細い字に挟まれたその他の字は、細い字の側へ寄る
+[healing]
+narrow = "ijlrtfI1"
+wide = "mwMW"
+narrow_shift = 54
+other_shift = 36
+wide_expand = 50
+
+# プロポーショナル版のカーニング
+[kerning]
+# 輪郭の凹みを隙間として数える上限
+depth_cap = 160
+# 詰めた後も、どの高さでもこれ以上は離す
+min_gap = 36
+# この量より小さい調整は入れない
+threshold = 20
+kana_threshold = 30
+# 濁点付きのかなが左に来る組の最小間隔。通常のすき間(kana_sb × 2 = 84)の 3/4 ほど。濁点が隣の字に寄りすぎないように
+kana_min_gap = 64
+kana_open = "トくへヘしレノイりつ"
+max_kern = 180
+# カーニングするのは、片側が大きく開いたこれらの字を含む組だけ
+open_glyphs = "TVWYALPFKXrfvwykx'\".,-/"
+# 詰めると別の字に見える組は調整しない
+exclude = ["rn", "rm", "rr", "cl", "cI", "vv", "VV", "nn", "ri", "li"]
+# 和欧間のアキ(和文と英数字が接するところに足す量)
+wakan = 120

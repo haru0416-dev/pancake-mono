@@ -1,0 +1,6 @@
+sources/
+build/
+.venv/
+.playwright-mcp/
+__pycache__/
+dist/

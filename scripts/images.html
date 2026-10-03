@@ -1,0 +1,244 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Pancake Mono README images</title>
+<!-- README 用の画像の元。`uv run python scripts/images.py` が各 .card を resources/<id>.png として撮影する -->
+<style>
+@font-face { font-family: "PM"; src: url("../build/fonts/mono/PancakeMono-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "PM"; src: url("../build/fonts/mono/PancakeMono-Italic.ttf"); font-weight: 400; font-style: italic; }
+@font-face { font-family: "PM"; src: url("../build/fonts/mono/PancakeMono-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "PM"; src: url("../build/fonts/mono/PancakeMono-BoldItalic.ttf"); font-weight: 700; font-style: italic; }
+@font-face { font-family: "PM100"; src: url("../build/fonts/mono/PancakeMono-Thin.ttf"); }
+@font-face { font-family: "PM200"; src: url("../build/fonts/mono/PancakeMono-ExtraLight.ttf"); }
+@font-face { font-family: "PM300"; src: url("../build/fonts/mono/PancakeMono-Light.ttf"); }
+@font-face { font-family: "PM400"; src: url("../build/fonts/mono/PancakeMono-Regular.ttf"); }
+@font-face { font-family: "PM500"; src: url("../build/fonts/mono/PancakeMono-Medium.ttf"); }
+@font-face { font-family: "PM600"; src: url("../build/fonts/mono/PancakeMono-SemiBold.ttf"); }
+@font-face { font-family: "PM700"; src: url("../build/fonts/mono/PancakeMono-Bold.ttf"); }
+@font-face { font-family: "PM800"; src: url("../build/fonts/mono/PancakeMono-ExtraBold.ttf"); }
+@font-face { font-family: "PM100"; src: url("../build/fonts/mono/PancakeMono-ThinItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PM200"; src: url("../build/fonts/mono/PancakeMono-ExtraLightItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PM300"; src: url("../build/fonts/mono/PancakeMono-LightItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PM400"; src: url("../build/fonts/mono/PancakeMono-Italic.ttf"); font-style: italic; }
+@font-face { font-family: "PM500"; src: url("../build/fonts/mono/PancakeMono-MediumItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PM600"; src: url("../build/fonts/mono/PancakeMono-SemiBoldItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PM700"; src: url("../build/fonts/mono/PancakeMono-BoldItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PM800"; src: url("../build/fonts/mono/PancakeMono-ExtraBoldItalic.ttf"); font-style: italic; }
+@font-face { font-family: "PS"; src: url("../build/fonts/prop/PancakeSans-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "PS"; src: url("../build/fonts/prop/PancakeSans-Medium.ttf"); font-weight: 500; }
+@font-face { font-family: "PS"; src: url("../build/fonts/prop/PancakeSans-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "PS"; src: url("../build/fonts/prop/PancakeSans-ExtraBold.ttf"); font-weight: 800; }
+@font-face { font-family: "PS"; src: url("../build/fonts/prop/PancakeSans-Italic.ttf"); font-weight: 400; font-style: italic; }
+
+:root {
+  --bg: #fff7e9;       /* 生地のクリーム色 */
+  --panel: #fffdf8;    /* 白いお皿 */
+  --fg: #3f2a1f;       /* ココア */
+  --soft: #8a6f58;     /* 補足の文字 */
+  --muted: #b39a82;
+  --line: #f0dcbf;
+  --syrup: #b0702f;    /* メープルシロップ */
+  --kiwi: #5b8a3c;     /* キウイ */
+  --berry: #bf5a73;    /* いちご */
+  --sky: #4a76a8;      /* ブルーベリー */
+  --lilac: #7d64a8;
+  --mint: #3f8a79;
+  --butter: #a5822a;   /* バター */
+  --cocoa: #2a1a12;    /* ダークのエディタ */
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #e9d7bb; display: grid; gap: 40px; padding: 40px; justify-items: start; }
+.card { position: relative; overflow: hidden; background: var(--bg); color: var(--fg); font-family: "PM", monospace; font-size: 30px; line-height: 1.32; }
+.card::before { /* うっすらとした焼き色のにじみ */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(640px 420px at 100% 0%, rgba(240, 205, 160, .28), transparent 70%),
+    radial-gradient(520px 360px at 0% 100%, rgba(190, 210, 165, .14), transparent 70%);
+}
+.card > * { position: relative; }
+pre { margin: 0; font: inherit; white-space: pre; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; }
+.chip { display: inline-block; font-family: "PM", monospace; font-size: 15px; line-height: 1; padding: 7px 11px 8px; border-radius: 999px;
+        background: #f3e7d4; color: var(--soft); letter-spacing: .02em; }
+.chip.dark { background: rgba(255,255,255,.1); color: #f1cf9a; }
+.cap { font-family: "PS", sans-serif; font-size: 19px; color: var(--soft); line-height: 1.5; }
+.eyebrow { font-family: "PM", monospace; font-size: 15px; letter-spacing: .18em; color: var(--syrup); text-transform: uppercase; }
+
+/* シンタックスの色 */
+.k { color: var(--lilac); font-style: italic; }
+.f { color: var(--sky); }
+.s { color: var(--kiwi); }
+.n { color: var(--butter); }
+.v { color: var(--syrup); }
+.p { color: var(--berry); }
+.c { color: var(--muted); }
+.t { color: var(--mint); }
+.dim { color: var(--muted); }
+
+/* エディタ風ウィンドウ(ダーク) */
+.win { background: var(--cocoa); color: #f4e7d4; border-radius: 20px; box-shadow: 0 4px 14px rgba(70, 35, 10, .08); overflow: hidden; }
+.win .bar { display: flex; align-items: center; gap: 10px; padding: 16px 20px; background: #3a271d; }
+.win .bar i { width: 13px; height: 13px; border-radius: 50%; display: inline-block; }
+.win .bar i { background: #5a4334; }
+.win .bar .tab { margin-left: 14px; font-family: "PM", monospace; font-size: 16px; color: #d9c3a6; background: #2a1a12; padding: 7px 14px 8px; border-radius: 9px 9px 0 0; align-self: flex-end; margin-bottom: -16px; }
+.win .bar .tab b { color: #f1cf9a; font-weight: 400; margin-right: 8px; }
+.win .code { padding: 30px 34px 32px 0; display: grid; grid-template-columns: 72px 1fr; }
+.win .ln { color: #6f5443; text-align: right; padding-right: 26px; user-select: none; }
+.win .k { color: #c2abe0; } .win .f { color: #9dbfe3; } .win .s { color: #b5cf94; } .win .n { color: #e5c57e; }
+.win .v { color: #e3ae7c; } .win .p { color: #e6a0b2; } .win .c { color: #8e725f; } .win .t { color: #7bd8c2; } .win .dim { color: #8e725f; }
+.win .status { display: flex; gap: 26px; padding: 12px 24px 13px; background: #231510; font-family: "PM", monospace; font-size: 15px; color: #a88b72; }
+.win .status b { font-weight: 400; color: #f1cf9a; }
+
+/* ---- 表紙(1200 x 630) ---- */
+#header { width: 1200px; height: 630px; padding: 58px 64px 54px; display: grid; grid-template-rows: 1fr auto; }
+#header .hero { display: grid; grid-template-columns: 1fr 470px; gap: 40px; align-items: center; }
+#header .mark { font-family: "PS", sans-serif; font-weight: 700; font-size: 112px; line-height: .98; letter-spacing: -.02em; margin: 14px 0 22px; }
+#header .mark em { font-style: normal; color: var(--syrup); }
+#header .lead { font-family: "PS", sans-serif; font-size: 27px; color: var(--soft); line-height: 1.55; }
+#header .lead b { font-weight: 500; color: var(--fg); }
+#header .stack { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
+#header .stack .chip { font-size: 16px; padding: 9px 14px 10px; }
+#header .win { font-size: 24px; line-height: 1.5; }
+#header .win .code { padding: 24px 28px 26px 0; grid-template-columns: 58px 1fr; }
+#header .win .ln { padding-right: 20px; }
+#header .ligs { display: flex; justify-content: space-between; align-items: center; color: var(--soft); font-size: 28px; padding-top: 30px; border-top: 1px solid var(--line); }
+#header .ligs .l { color: var(--syrup); } #header .ligs .m { color: var(--sky); } #header .ligs .r { color: var(--berry); }
+
+/* ---- コード例 ---- */
+#showcase { width: 1400px; padding: 50px 60px 70px; }
+#showcase .win { font-size: 29px; line-height: 1.5; }
+
+/* ---- 桁揃え ---- */
+#grid { padding: 50px 60px 64px; }
+#grid .panel { padding: 30px 38px 32px; width: max-content; }
+#grid .head { display: grid; gap: 6px; margin-bottom: 18px; }
+#grid .head .cap { font-size: 18px; }
+#grid pre {
+  font-size: 32px; line-height: 1.7; width: calc(1em * 1.2 * 14); color: var(--fg);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(1em * .6 - 1px), var(--line) calc(1em * .6 - 1px) calc(1em * .6)),
+    repeating-linear-gradient(90deg, #fbf3e6 0 calc(1em * 1.2), #fffbf4 calc(1em * 1.2) calc(1em * 2.4));
+  border-radius: 10px; outline: 1px solid var(--line);
+}
+#grid .ruler { color: var(--muted); font-size: 18px; letter-spacing: 0; }
+
+/* ---- 無限矢印・和文のつなぎ ---- */
+#infinite { width: 1300px; padding: 50px 60px 64px; display: grid; gap: 26px; }
+#infinite .panel { padding: 26px 36px 30px; display: grid; gap: 14px; }
+#infinite .head { display: flex; align-items: center; gap: 14px; }
+#infinite pre { font-size: 32px; line-height: 1.55; }
+#infinite .plain { color: var(--muted); }
+
+/* ---- 特徴(ベントー) ---- */
+#features { width: 1300px; padding: 50px 60px 64px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; }
+#features .tile { position: relative; border-radius: 20px; padding: 26px 24px 20px; display: grid; gap: 10px; align-content: space-between; grid-column: span 2; min-height: 190px; border: 1px solid rgba(126, 74, 20, .08); }
+#features .tile .top .chip { position: absolute; top: 14px; right: 14px; }
+#features .tile .cap { font-size: 18px; }
+#features .big { font-size: 46px; line-height: 1.2; letter-spacing: .02em; white-space: nowrap; }
+#features .wide { grid-column: span 6; min-height: 0; gap: 4px; }
+#features .wide .big { font-size: 50px; }
+#features .wide .cap { margin-bottom: 8px; }
+#features .wide .big::before { content: attr(data-l); font-family: "PM", monospace; font-size: 15px; color: var(--soft); display: inline-block; width: 120px; letter-spacing: .05em; font-feature-settings: normal; }
+#features .off { font-feature-settings: "calt" 0; color: var(--muted); }
+#features .butter { background: #faf1df; } #features .berry { background: #f9eded; } #features .sky { background: #eef2f6; }
+#features .kiwi { background: #eff4e8; } #features .lilac { background: #f3eff7; } #features .mint { background: #edf3ef; } #features .plain { background: var(--panel); }
+#features .chip.b { background: rgba(255,255,255,.75); }
+
+/* ---- ウェイト ---- */
+#weights { width: 1300px; padding: 50px 60px 64px; }
+#weights .panel { padding: 34px 40px 30px; display: grid; gap: 2px; }
+#weights .row { display: grid; grid-template-columns: 150px 60px 1fr auto; align-items: baseline; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 42px; line-height: 1.35; }
+#weights .row:last-child { border-bottom: 0; }
+#weights .row .nm { font-family: "PS", sans-serif; font-size: 20px; color: var(--soft); }
+#weights .row .no { font-family: "PM", monospace; font-size: 16px; color: var(--syrup); }
+#weights .row .it { font-size: 30px; color: var(--soft); font-style: italic; }
+</style>
+
+<!-- 表紙 -->
+<div class="card" id="header">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Maple Mono × Kiwi Maru</div>
+      <div class="mark">Pancake<br><em>Mono</em></div>
+      <div class="lead">まるくてかわいい、<b>日英プログラミングフォント</b>。<br>和文 1 字が英字 2 字分にそろう等幅と、文章向けの Sans。</div>
+      <div class="stack"><span class="chip">Mono</span><span class="chip">NF</span><span class="chip">JPDOC</span><span class="chip">Sans</span><span class="chip">8 weights + Italic</span></div>
+    </div>
+    <div class="win">
+      <div class="bar"><i></i><i></i><i></i><span class="tab"><b>✻</b>pancake.ts</span></div>
+      <div class="code"><div class="ln">1<br>2<br>3<br>4</div><pre><span class="k">const</span> <span class="v">plate</span> = <span class="f">bake</span>({
+  味: <span class="s">"ふわっと"</span>, 枚数: <span class="n">3</span>,
+  トッピング: [<span class="s">"★"</span>, <span class="s">"♡"</span>],
+}); <span class="c">// いただきます</span></pre></div>
+    </div>
+  </div>
+  <div class="ligs"><span class="l">&lt;=== --&gt; =&gt; !=</span><span class="m">ーーー 〜〜〜 ――</span><span class="r">★ ♡ ✻ ◐ ①</span><span>Thin → ExtraBold</span></div>
+</div>
+
+<!-- コード例 -->
+<div class="card" id="showcase">
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i><span class="tab"><b>✻</b>Pancake.tsx</span></div>
+    <div class="code"><div class="ln">1<br>2<br>3<br>4<br>5<br>6</div><pre><span class="k">export default function</span> <span class="f">Pancake</span>() {
+  <span class="c">// [TODO] シロップをかける量を決める</span>
+  <span class="k">const</span> <span class="v">stack</span> = { 名前: <span class="s">"パンケーキ"</span>, 枚数: <span class="n">3</span>, ふわふわ: <span class="n">true</span> };
+  <span class="k">const</span> <span class="f">ready</span> = () =&gt; <span class="v">stack</span>.枚数 &gt;= <span class="n">3</span> &amp;&amp; (<span class="v">stack</span>.ふわふわ !== <span class="k">null</span>);
+  <span class="k">return</span> &lt;<span class="t">Plate</span>&gt;{<span class="f">ready</span>() ? <span class="s">"いただきます♡"</span> : <span class="s">"焼いています✻"</span>}&lt;/<span class="t">Plate</span>&gt;
+}</pre></div>
+    <div class="status"><span><b>Pancake Mono</b> Regular</span><span>半角 600 : 全角 1200</span><span>calt ✓ liga ✓</span><span>UTF-8</span><span>TypeScript React</span></div>
+  </div>
+</div>
+
+<!-- 桁揃え -->
+<div class="card" id="grid">
+  <div class="panel">
+    <div class="head"><div class="eyebrow">1 : 2 Grid</div><div class="cap">和文 1 字 = 英字 2 字。記号も半角にそろえてあるので桁が崩れない</div></div>
+<pre><span class="ruler">0 1 2 3 4 5 6 7 8 9 0 1 2 3 </span>
+Fluffy pancakes, maple syrup
+丸い文字で日本語も読みやすい
+ふわふわのパンケーキを焼こう
+<span class="s">★☆♡♥♠♣○●□■◇◆△▲♪♫※✻⌘⏎◐◑①②←→✓✗</span>
+<span class="v">1!2@3#4$5%6^7&amp;8*9(0)_+{}[];:</span></pre>
+  </div>
+</div>
+
+<!-- 無限矢印・和文のつなぎ -->
+<div class="card" id="infinite">
+  <div class="panel">
+    <div class="head"><span class="chip">liga / calt</span><span class="cap">Maple Mono の無限矢印。合成後もそのままつながる</span></div>
+<pre><span class="v">&lt;---&gt;  &lt;-------&gt;  &lt;-----------&gt;</span>
+<span class="f">&lt;=====&gt;  &lt;===|===&gt;  &lt;=====|=====&gt;</span>
+<span class="p">|-----|  ~~~~~&gt;  &lt;~~~~~~~~~~~&gt;</span></pre>
+  </div>
+  <div class="panel">
+    <div class="head"><span class="chip">calt</span><span class="cap">和文のつなぎ。長音・波ダッシュ・2 倍ダッシュを続けて打つと 1 本の線になる</span></div>
+<pre><span class="plain">パンケーキ</span> → <span class="s">パンケーーーキ</span>    <span class="plain">おいしい〜</span> → <span class="s">おいしい〜〜〜</span>
+<span class="v">ひとくち――ふわっ</span>    <span class="p">あまーーーい〜〜♪</span></pre>
+  </div>
+</div>
+
+<!-- 特徴 -->
+<div class="card" id="features">
+  <div class="tile plain"><div class="top"><div class="big">ー一－ ヘへ</div><span class="chip b">default</span></div><div class="cap">長音と漢数字、カナとかな</div></div>
+  <div class="tile plain"><div class="top"><div class="big">〜～ カ力</div><span class="chip b">cv92</span></div><div class="cap">波ダッシュと全角チルダ、カナと漢字</div></div>
+  <div class="tile berry"><div class="top"><div class="big"><span class="v">ばぱ</span> <span class="p">ビピ</span></div><span class="chip b">cv94</span></div><div class="cap">濁点・半濁点を 1.28 倍に拡大</div></div>
+  <div class="tile butter"><div class="top"><div class="big">[　] ①❶</div><span class="chip b">cv91</span></div><div class="cap">全角スペースの印と囲み数字</div></div>
+  <div class="tile sky"><div class="top"><div class="big"><span class="n">★</span><span class="p">♡</span><span class="f">♪</span><span class="v">※</span><span class="s">⏻</span></div><span class="chip b">symbols</span></div><div class="cap">Maple の線で描き直した記号</div></div>
+  <div class="tile lilac"><div class="top"><div class="big">I &lt;3 <span class="p" style="font-feature-settings: 'ss20' 1">&lt;3</span></div><span class="chip b">ss20</span></div><div class="cap">&lt;3 がハートに(左が通常、右が ss20)</div></div>
+  <div class="tile wide mint">
+    <div class="cap">Texture Healing。i や l の隣の m が少し広がり、i や l は m から離れる。字の送り幅は変わらない</div>
+    <div class="big off" data-l="calt off">minimum will film limit</div><div class="big" data-l="calt on">minimum will film limit</div>
+  </div>
+</div>
+
+<!-- ウェイト -->
+<div class="card" id="weights">
+  <div class="panel">
+    <div class="row" style="font-family: PM100"><span class="nm">Thin</span><span class="no">100</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM100">ふわり</span></div>
+    <div class="row" style="font-family: PM200"><span class="nm">ExtraLight</span><span class="no">200</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM200">ふわり</span></div>
+    <div class="row" style="font-family: PM300"><span class="nm">Light</span><span class="no">300</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM300">ふわり</span></div>
+    <div class="row" style="font-family: PM400"><span class="nm">Regular</span><span class="no">400</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM400">ふわり</span></div>
+    <div class="row" style="font-family: PM500"><span class="nm">Medium</span><span class="no">500</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM500">ふわり</span></div>
+    <div class="row" style="font-family: PM600"><span class="nm">SemiBold</span><span class="no">600</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM600">ふわり</span></div>
+    <div class="row" style="font-family: PM700"><span class="nm">Bold</span><span class="no">700</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM700">ふわり</span></div>
+    <div class="row" style="font-family: PM800"><span class="nm">ExtraBold</span><span class="no">800</span><div>Pancake まるい日本語 <span class="n">★</span><span class="p">♡</span></div><span class="it" style="font-family: PM800">ふわり</span></div>
+  </div>
+</div>

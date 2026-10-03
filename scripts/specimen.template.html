@@ -1,0 +1,286 @@
+<title>__FAMILY__ 見本帳</title>
+<style>
+/*__FONTFACES__*/
+/* Layout: 上に操作パネル(ウェイト・イタリック・機能)、下に見本を縦に積む。見本はすべて同じ設定を共有する */
+:root {
+  --bg: #f4f6ef;
+  --panel: #ffffff;
+  --fg: #22301f;
+  --muted: #66735f;
+  --line: #dde3d3;
+  --accent: #5b8a2e;
+  --accent-soft: #e6f0d8;
+  --pink: #c9577a;
+  --code-bg: #f8faf4;
+  --ui: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --pk: "PK", ui-monospace, monospace;
+  --size: 20px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151a13; --panel: #1d241a; --fg: #e8eee2; --muted: #9aa891; --line: #2f3a2a;
+    --accent: #a5d16f; --accent-soft: #2a3721; --pink: #f08aa8; --code-bg: #181e16; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151a13; --panel: #1d241a; --fg: #e8eee2; --muted: #9aa891; --line: #2f3a2a;
+  --accent: #a5d16f; --accent-soft: #2a3721; --pink: #f08aa8; --code-bg: #181e16; color-scheme: dark;
+}
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font-family: var(--ui); line-height: 1.6; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 32px 56px; display: grid; gap: 28px; }
+header { display: grid; gap: 10px; }
+h1 { font-family: var(--pk); font-weight: 700; font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.15; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h1 .kiwi { color: var(--accent); }
+.lede { margin: 0; color: var(--muted); max-width: 70ch; }
+h2 { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0; font-weight: 600; }
+section { display: grid; gap: 12px; min-width: 0; }
+
+.panel { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 12px; box-shadow: 0 6px 24px -18px rgba(30, 50, 20, .5); }
+.row { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button, .chip { font: inherit; font-size: .85rem; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; }
+.seg button[aria-pressed="true"], .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chip.jp[aria-pressed="true"] { background: var(--accent-soft); }
+button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+label { font-size: .85rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+input[type="range"] { accent-color: var(--accent); width: 130px; }
+.num { font-variant-numeric: tabular-nums; color: var(--fg); min-width: 3em; }
+details summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
+.maple-feats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; max-height: 40vh; overflow-y: auto; }
+.maple-feats .chip { text-align: left; }
+.maple-feats .chip b { font-family: var(--pk); font-weight: 600; margin-right: 4px; }
+
+.sample { font-family: var(--pk); font-size: var(--size); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin: 0; overflow-x: auto; white-space: pre; line-height: normal; tab-size: 2; }
+.sample.wrap-text { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+.sample[contenteditable]:focus { outline: 2px solid var(--accent); }
+.c-com { color: var(--muted); }
+.c-kw { color: var(--pink); }
+.c-str { color: var(--accent); }
+
+.waterfall { display: grid; gap: 2px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 20px; }
+.wf { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; align-items: baseline; border-bottom: 1px dashed var(--line); padding-block: 6px; min-width: 0; }
+.wf:last-child { border-bottom: 0; }
+.wf span { font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wf p { margin: 0; font-family: var(--pk); font-size: calc(var(--size) * 1.6); white-space: nowrap; overflow: hidden; text-overflow: clip; }
+
+.pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.pair { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; }
+.pair p { margin: 0; font-family: var(--pk); font-size: calc(var(--size) * 2); line-height: 1.2; letter-spacing: .05em; }
+.pair small { color: var(--muted); font-size: .75rem; }
+
+.twocol { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+.vertical { writing-mode: vertical-rl; font-family: var(--pk); font-size: var(--size); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; height: 16em; line-height: 1.8; margin: 0; }
+@media (max-width: 640px) { .twocol { grid-template-columns: 1fr; } .vertical { height: 12em; } .wf { grid-template-columns: 1fr; gap: 0; } }
+.prop-sample { font-family: "PKP", var(--ui); line-height: 1.8; }
+.prop-head { margin: 0 0 .4em; font-size: 1.6em; line-height: 1.3; font-weight: inherit; }
+.heal-grid { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 14px; align-items: center; }
+.heal-label { font-size: .78rem; color: var(--muted); }
+.note { color: var(--muted); font-size: .82rem; margin: 0; max-width: 75ch; }
+footer { color: var(--muted); font-size: .8rem; max-width: 80ch; display: grid; gap: 4px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>__FAMILY__ <span class="kiwi">キウイ</span>と楓</h1>
+    <p class="lede">英字は Maple Mono、和文は Kiwi Maru。半角600・全角1200の等幅で、8ウェイトとイタリックがあります。細い字と広い字の間合いを整える Texture Healing、大きめの濁点、Kiwi Maru の旧字形切り替えも備えています。下の操作パネルでウェイトや字形切り替え(OpenType の cv / ss)を変えると、すべての見本に反映されます。見本の文章はクリックして書き換えられます。</p>
+  </header>
+
+  <div class="panel" role="region" aria-label="表示の設定">
+    <div class="row">
+      <div class="seg" id="weights" role="group" aria-label="ウェイト"></div>
+      <div class="seg" role="group" aria-label="スタイル">
+        <button type="button" id="italic" aria-pressed="false">Italic</button>
+        <button type="button" id="liga" aria-pressed="true">リガチャ</button>
+      </div>
+      <label for="size">サイズ <input type="range" id="size" min="12" max="44" value="20"> <span class="num" id="sizev">20px</span></label>
+    </div>
+    <div class="row">
+      <div class="seg" role="group" aria-label="和文の字形切り替え">
+        <button type="button" class="chip jp" data-f="cv91" aria-pressed="false">cv91 全角スペースを空白に</button>
+        <button type="button" class="chip jp" data-f="cv92" aria-pressed="false">cv92 紛らわしいカタカナを強調</button>
+        <button type="button" class="chip jp" data-f="cv93" aria-pressed="false">cv93 全角英数を和文字形に</button>
+        <button type="button" class="chip jp" data-f="cv94" aria-pressed="false">cv94 濁点を元の大きさに</button>
+        <button type="button" class="chip jp" data-f="ss20" aria-pressed="false">ss20 &lt;3 をハートに</button>
+      </div>
+      <div class="seg" role="group" aria-label="Kiwi Maru の字形機能">
+        <button type="button" class="chip jp" data-f="jp78" aria-pressed="false">jp78 旧字形</button>
+        <button type="button" class="chip jp" data-f="trad" aria-pressed="false">trad 旧字体</button>
+        <button type="button" class="chip jp" data-f="nlck" aria-pressed="false">nlck 印刷標準字体</button>
+        <button type="button" class="chip jp" data-f="expt" aria-pressed="false">expt 略字</button>
+      </div>
+    </div>
+    <details>
+      <summary>Maple Mono の字形切り替え(cv / ss)</summary>
+      <div class="maple-feats" id="mapleFeats"></div>
+    </details>
+  </div>
+
+  <section>
+    <h2>コード</h2>
+<pre class="sample" contenteditable="true" spellcheck="false" id="code"><span class="c-com">// キウイと楓のフォントで、のんびりコーディング</span>
+<span class="c-kw">type</span> Fruit = { name: string; 甘さ: number };
+
+<span class="c-kw">const</span> basket: Fruit[] = [
+  { name: <span class="c-str">"キウイ"</span>, 甘さ: 7 },
+  { name: <span class="c-str">"メープル"</span>, 甘さ: 10 },
+];
+
+<span class="c-kw">for</span> (<span class="c-kw">const</span> f <span class="c-kw">of</span> basket) {
+  <span class="c-kw">if</span> (f.甘さ &gt;= 8 &amp;&amp; f.name !== <span class="c-str">""</span>) {
+    console.log(<span class="c-str">`${f.name} は甘い！ → 0O 1lI |`</span>); <span class="c-com">// [TODO] 計量する</span>
+  }
+}
+<span class="c-com">// 無限矢印: &lt;-------&gt;  &lt;=====|=====&gt;  ~~~~~~&gt;  ##########</span></pre>
+  </section>
+
+  <section>
+    <h2>Texture Healing</h2>
+    <div class="heal-grid">
+      <span class="heal-label">なし</span><pre class="sample heal-demo" data-heal="off">minimum will film limit
+William mint 'imitation'</pre>
+      <span class="heal-label">あり</span><pre class="sample heal-demo" data-heal="on">minimum will film limit
+William mint 'imitation'</pre>
+    </div>
+    <p class="note">等幅のまま、細い字(i l j r t f I 1)の隣にある広い字(m w M W)は細い字の側へ少し広がり、細い字は離れます。広い字と細い字に挟まれたその他の字も、細い字の側へ寄ります(Smart Kerning)。字の送り幅は変えないので、桁は崩れません。</p>
+  </section>
+
+  <section>
+    <h2>和文のつなぎ</h2>
+<pre class="sample wrap-text" contenteditable="true" spellcheck="false">ラーメン → ラーーーメン   すごーーーい！
+ああ〜 → ああ〜〜〜ん     るんるん〜〜♪
+それは――つまり</pre>
+    <p class="note">Maple の無限矢印と同じ発想で、和文の記号も続けて打つとつながります。長音「ー」と波ダッシュ「〜」は2つ以上続くと1本の線と波に、2倍ダッシュ「――」は隙間なくつながります。1つだけのときは普段の字形のままです。</p>
+  </section>
+
+  <section>
+    <h2>記号</h2>
+<pre class="sample wrap-text" contenteditable="true" spellcheck="false">★☆ ♡♥ ♠♤ ♣♧ ♦♢ ○●◎ □■ ◇◆ △▲ ▽▼ ▶◀ ♩♪♫♬ ※ ♂♀
+⌘ ⏎ ⎋ ⏻ ⬛⬜   ①②③ ❶❷❸ ⅠⅡⅢ ≒≦≧ ←↑→↓
+<span id="spin">✻</span> Thinking…  ⏺ Read(build.py)  ⎿ ok   ✓ 成功 ✗ 失敗 ⚠ 注意 ℹ 情報
+スピナー: ⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏  ◐◓◑◒  ◴◷◶◵  ·✢✳✶✻✽
+I &lt;3 fonts   好き♡   ※注意   ★5つ   全角[　]スペース</pre>
+    <p class="note">★♡♪ などは Maple の角丸と線の太さに合わせて描き直し、ウェイトごとに線の太さも変わります。等幅版では幅の曖昧な記号をすべて半角に、JPDOC 版ではすべて全角にそろえています(⬛⬜ は常に全角、⌘⏎ などのキー表記は常に半角)。ss20 で &lt;3 がハートになります。スピナーや Claude Code などの状態表示に使う ✻✳✢⏺◐◴ も同じ線で描いていて、コマごとに幅が変わらないよう、どの版でも半角です。</p>
+  </section>
+
+  <section>
+    <h2>ウェイト</h2>
+    <div class="waterfall" id="waterfall"></div>
+  </section>
+
+  <section>
+    <h2>紛らわしい字</h2>
+    <div class="pairs">
+      <div class="pair"><p>ー一－</p><small>長音 / 漢数字 / 全角マイナス</small></div>
+      <div class="pair"><p>カ力</p><small>カタカナ / 漢字「ちから」</small></div>
+      <div class="pair"><p>ロ口</p><small>カタカナ / 漢字「くち」</small></div>
+      <div class="pair"><p>エ工</p><small>カタカナ / 漢字「こう」</small></div>
+      <div class="pair"><p>ニ二</p><small>カタカナ / 漢数字</small></div>
+      <div class="pair"><p>ハ八</p><small>カタカナ / 漢数字</small></div>
+      <div class="pair"><p>タ夕</p><small>カタカナ / 漢字「ゆう」</small></div>
+      <div class="pair"><p>へヘ</p><small>ひらがな / カタカナ</small></div>
+      <div class="pair"><p>ぺペ</p><small>ひらがな / カタカナ</small></div>
+      <div class="pair"><p>〜～</p><small>波ダッシュ / 全角チルダ</small></div>
+      <div class="pair"><p>0O1lI|</p><small>Maple の英数字</small></div>
+      <div class="pair"><p>[　]</p><small>全角スペースの可視化</small></div>
+      <div class="pair"><p>ばぱパ</p><small>濁点・半濁点を拡大</small></div>
+      <div class="pair"><p>國唖</p><small>trad / jp78 で切り替え</small></div>
+    </div>
+    <p class="note">既定で、長音「ー」を短く、カタカナ「ヘベペ」を細く高く、全角英数記号を Maple の字形にしています。cv92 を有効にすると、漢字と紛らわしいカタカナがさらに小さくなります。</p>
+  </section>
+
+  <section>
+    <h2>文章と縦書き</h2>
+    <div class="twocol">
+<pre class="sample wrap-text" contenteditable="true" spellcheck="false">吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。
+
+The quick brown fox jumps over the lazy dog. 全角の「ＡＢＣ　１２３」と半角の "ABC 123" も並べてみる。</pre>
+<p class="vertical" contenteditable="true" spellcheck="false">「キウイと楓」は、縦書きにも対応しています。句読点、括弧、長音ー、小書きのゃゅょも縦向きの字形になります。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>プロポーショナル版 __PROP_FAMILY__</h2>
+<div class="sample wrap-text prop-sample" contenteditable="true" spellcheck="false"><p class="prop-head">キウイと楓の、やわらかい文章用フォント</p>吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。「キウイ」と『メープル』（楓）。
+
+The quick brown fox jumps over the lazy dog. AVATAR, To, Type, LT。Mapleで書いたcodeをGitHubに置く、トイレのくつした。</div>
+    <p class="note">英字は Maple の字形のまま、輪郭から字間を自動で決め直しています。数字は桁が揃う同じ幅、かなと約物は詰め組み、漢字は全角(1100)の中央です。等幅を前提にしたリガチャは外しています。AV や To、ディ のように片側が開いた字の組はカーニングで詰め、和文と英字が接するところには少しだけ間(和欧間のアキ)を入れています。</p>
+  </section>
+
+  <footer>
+    <span>英字: Maple Mono v7.9 (SIL OFL 1.1) / 和文: Kiwi Maru (SIL OFL 1.1)。合成フォント __FAMILY__ / __PROP_FAMILY__ も SIL OFL 1.1 で配布予定。</span>
+    <span>JPDOC 版(矢印・図形を全角にした文書向け)と Nerd Fonts 版もあります。容量を抑えるため、このページには見本に出てくる文字とかな・英数だけを埋め込んでいます。書き換えた文字が埋め込みに無い場合は代替フォントで表示されます。</span>
+  </footer>
+</div>
+
+<script>
+const WEIGHTS = [["Thin", 100], ["ExtraLight", 200], ["Light", 300], ["Regular", 400], ["Medium", 500], ["SemiBold", 600], ["Bold", 700], ["ExtraBold", 800]];
+const MAPLE_FEATS = /*__MAPLE_FEATS__*/[];
+const state = { weight: 400, italic: false, liga: true, feats: new Set() };
+try { Object.assign(state, JSON.parse(localStorage.getItem("pk-spec") || "{}")); state.feats = new Set(state.feats || []); } catch (e) {}
+
+const root = document.documentElement;
+function save() {
+  try { localStorage.setItem("pk-spec", JSON.stringify({ ...state, feats: [...state.feats] })); } catch (e) {}
+}
+function apply() {
+  const ff = [...state.feats].map(f => `"${f}" 1`);
+  if (!state.liga) ff.push('"calt" 0', '"liga" 0');
+  const css = ff.length ? ff.join(", ") : "normal";
+  document.querySelectorAll(".sample, .wf p, .pair p, .vertical").forEach(el => {
+    if (el.dataset.heal) {
+      el.style.fontFeatureSettings = el.dataset.heal === "off" ? '"calt" 0' : '"calt" 1';
+    } else {
+      el.style.fontFeatureSettings = css;
+    }
+    el.style.fontStyle = state.italic ? "italic" : "normal";
+    if (!el.closest(".wf")) el.style.fontWeight = state.weight;
+  });
+  document.querySelectorAll("#weights button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.w === state.weight)));
+  document.getElementById("italic").setAttribute("aria-pressed", String(state.italic));
+  document.getElementById("liga").setAttribute("aria-pressed", String(state.liga));
+  document.querySelectorAll("[data-f]").forEach(b => b.setAttribute("aria-pressed", String(state.feats.has(b.dataset.f))));
+  save();
+}
+
+const wbox = document.getElementById("weights");
+const wf = document.getElementById("waterfall");
+for (const [name, w] of WEIGHTS) {
+  const b = document.createElement("button");
+  b.type = "button"; b.id = "w" + w; b.dataset.w = w; b.textContent = name;
+  b.addEventListener("click", () => { state.weight = w; apply(); });
+  wbox.appendChild(b);
+  const row = document.createElement("div");
+  row.className = "wf";
+  row.innerHTML = `<span>${name} ${w}</span><p style="font-weight:${w}">キウイと楓 Maple 0123 あア永</p>`;
+  wf.appendChild(row);
+}
+const mf = document.getElementById("mapleFeats");
+for (const [tag, label] of MAPLE_FEATS) {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.dataset.f = tag; b.id = "f-" + tag;
+  b.innerHTML = `<b>${tag}</b>`;
+  b.appendChild(document.createTextNode(label));
+  mf.appendChild(b);
+}
+document.querySelectorAll("[data-f]").forEach(b => b.addEventListener("click", () => {
+  const f = b.dataset.f;
+  state.feats.has(f) ? state.feats.delete(f) : state.feats.add(f);
+  apply();
+}));
+document.getElementById("italic").addEventListener("click", () => { state.italic = !state.italic; apply(); });
+document.getElementById("liga").addEventListener("click", () => { state.liga = !state.liga; apply(); });
+const size = document.getElementById("size");
+size.addEventListener("input", () => {
+  root.style.setProperty("--size", size.value + "px");
+  document.getElementById("sizev").textContent = size.value + "px";
+});
+apply();
+// Claude Code 風のスピナー(動きを減らす設定のときは止める)
+const spin = document.getElementById("spin");
+const frames = ["·", "✢", "✳", "✶", "✻", "✽", "✻", "✶", "✳", "✢"];
+if (spin && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let i = 0;
+  setInterval(() => { spin.textContent = frames[i = (i + 1) % frames.length]; }, 120);
+}
+</script>

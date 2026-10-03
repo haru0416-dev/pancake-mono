@@ -1,0 +1,49 @@
+name: 表示の不具合
+description: 字が欠ける・重なる・幅がずれる・cv や ss を有効にしても表示が変わらないなど
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: 再現できる文字列と、どの環境で起きるかを書いてもらえると調べやすくなります。
+  - type: dropdown
+    id: family
+    attributes:
+      label: ファミリー
+      options: [Pancake Mono, Pancake Mono NF, Pancake Mono JPDOC, Pancake Sans]
+    validations:
+      required: true
+  - type: input
+    id: weight
+    attributes:
+      label: ウェイト・スタイル
+      placeholder: Regular / Bold Italic など
+  - type: input
+    id: version
+    attributes:
+      label: フォントのバージョン
+      description: zip の名前か、フォントの情報に出るバージョン
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: OS とアプリ
+      placeholder: macOS 26 / VS Code 1.105、Windows 11 / Windows Terminal など
+    validations:
+      required: true
+  - type: textarea
+    id: text
+    attributes:
+      label: 再現する文字列
+      description: そのまま貼れる文字列。cv・ss などの設定を変えていればそれも
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 起きていることと、期待する表示
+      description: スクリーンショットがあれば貼ってください
+    validations:
+      required: true

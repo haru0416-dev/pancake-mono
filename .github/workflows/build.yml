@@ -1,0 +1,57 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+# Release を作るために書き込みが要る(フォークからの PR では GitHub が読み取り専用に落とす)
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Python を用意する
+        run: uv python install
+
+      # 元フォントは変わらないので、Maple のバージョンと取得スクリプトをキーにして保存する
+      - name: 元フォントのキャッシュ
+        uses: actions/cache@v4
+        with:
+          path: sources
+          key: sources-${{ hashFiles('scripts/fetch_sources.sh') }}
+
+      - name: ビルドと検証
+        run: make -j1 all J=4
+
+      - name: 配布用 zip を作る
+        run: make dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pancake-fonts
+          path: dist/*.zip
+          retention-days: 14
+
+      - name: タグが pyproject.toml のバージョンと一致するか確かめる
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          v=$(sed -n 's/^version = "\(.*\)"/\1/p' pyproject.toml)
+          test "v$v" = "${GITHUB_REF_NAME}" || { echo "タグ ${GITHUB_REF_NAME} と version $v が一致しません"; exit 1; }
+
+      - name: Release を作る
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true

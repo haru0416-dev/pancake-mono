@@ -11,7 +11,7 @@
 
 <p align="center">
   <img alt="License" src="https://img.shields.io/badge/license-OFL--1.1-f0b46c?style=flat-square">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-a8d68a?style=flat-square">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.1-a8d68a?style=flat-square">
   <img alt="Weights" src="https://img.shields.io/badge/weights-8%20%2B%20italic-8fc3f0?style=flat-square">
   <img alt="Width" src="https://img.shields.io/badge/width-1%3A2-c9a8f0?style=flat-square">
 </p>
@@ -122,7 +122,7 @@ make tune       # 調整候補を並べた比較ページ(build/tune-board.html)
 make woff2      # Web 用に build/woff2/ へ woff2 を出す
 ```
 
-出力先は、フォントが `build/fonts/{mono,mono-nf,mono-jpdoc,prop}/`、見本帳が `build/kiwi-specimen.html`、配布用 zip が `dist/` です。バージョンは `pyproject.toml` の `version` だけに書き、`v1.0.0` のようにタグを打つと GitHub Actions が Release に zip を添えます。
+出力先は、フォントが `build/fonts/{mono,mono-nf,mono-jpdoc,prop}/`、見本帳が `build/kiwi-specimen.html`、配布用 zip が `dist/` です。バージョンは `pyproject.toml` の `version` だけに書き、`v1.0.1` のようにタグを打つと GitHub Actions が Release に zip を添えます。
 
 <details>
 <summary><b>デザインの値を調整する</b></summary>

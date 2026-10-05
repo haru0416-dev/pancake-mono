@@ -1,6 +1,6 @@
 [project]
 name = "pancake-mono"
-version = "1.0.0"
+version = "1.0.1"
 description = "Maple Mono と Kiwi Maru を合成した日英フォント Pancake Mono / Pancake Sans のビルドスクリプト"
 requires-python = ">=3.14"
 dependencies = [

@@ -124,7 +124,7 @@ wheels = [
 
 [[package]]
 name = "pancake-mono"
-version = "1.0.0"
+version = "1.0.1"
 source = { virtual = "." }
 dependencies = [
     { name = "brotli" },

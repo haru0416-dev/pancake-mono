@@ -155,6 +155,18 @@ def check(path, prop=False):
                 errors.append(f"{text} の矢じりが横線と分かれていない: {names}")
             elif any(hmtx[n][0] != 0 for n in heads):
                 errors.append(f"{text} の矢じりのグリフに幅がある: {[(n, hmtx[n][0]) for n in heads]}")
+        if "Italic" in path:
+            # イタリックの部品は、横線の右端をセルの境界の先まで伸ばしてある(継ぎ目の薄い縦線を防ぐ)
+            # 横線ごとに見る(上の線は斜めに右へはみ出すので、グリフ全体の右端では下の線の不足を見逃す)
+            glyf = f["glyf"]
+            for name in ("equal.mid.seq", "hyphen.mid.seq", "equal.sta.seq"):
+                g = glyf[name]
+                coords, start = g.getCoordinates(glyf)[0], 0
+                for end in g.endPtsOfContours:
+                    xs = [x for x, _ in coords[start:end + 1]]
+                    start = end + 1
+                    if max(xs) < hmtx[name][0]:
+                        errors.append(f"{name} の横線の右端がセルの境界に届いていない: {max(xs)}")
         bars = BoundsPen(gs)
         gs["equal.mid.seq"].draw(bars)
         for name in ("greater_equal.end.seq", "less_equal.sta.seq"):

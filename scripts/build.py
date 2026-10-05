@@ -772,11 +772,12 @@ class Builder:
             return out
 
         # 横線の帯は、ウェイトごとに = と - の中間の部品の輪郭から取る
-        bands, reach = {}, {}
+        bands, reach, bar_ys = {}, {}, {}
         for kind in ("equal", "hyphen"):
             ys = sorted((round(c.bounds[1]), round(c.bounds[3])) for c in path_of(f"{kind}.mid.seq").contours)
             bands[kind] = union(rect(-2000, y0, 2000, y1) for y0, y1 in ys)
             reach[kind] = min(y1 - y0 for y0, y1 in ys) / 2
+            bar_ys[kind] = ys
         pure = {f"{k}.{p}.seq" for k in bands for p in ("sta", "mid", "end")}
         rules = []
         for name in list(self.order):
@@ -811,6 +812,8 @@ class Builder:
             self.replace_path(name, bars)
             self.store_path(f"{name}.head", shifted, 0)
             rules.append(f"sub {name} by {name} {name}.head;")
+        if self.italic:
+            self.square_italic_joints(bar_ys, path_of, rect)
         gdef = self.font["GDEF"].table if "GDEF" in self.font else None
         if gdef and gdef.GlyphClassDef:
             for r in rules:
@@ -818,6 +821,28 @@ class Builder:
         # calt の他の規則で部品が決まったあとに分けるため、最後の lookup にする
         self.fea_tail += ["lookup arrow_split {", *[f"  {r}" for r in rules], "} arrow_split;",
                           "feature calt { lookup arrow_split; } calt;"]
+
+    def square_italic_joints(self, bar_ys, path_of, rect):
+        """イタリックの部品は横線の端が斜めで、継ぎ目がセルの境界より手前のピクセルの途中に来る。
+        そのピクセルは左右の部品から半分ずつしか塗られず、重ねて描くと薄い縦線が出る。
+        右へつながる横線の右端をセルの境界の先まで垂直に伸ばし、境界の左のピクセルを左の部品だけで塗る。
+        伸ばした範囲は次の部品の横線がもともと覆っているので、字形は変わらない"""
+        for name in list(self.order):
+            is_seq = name.endswith(".seq") or ".seq." in name
+            kind = "equal" if "equal" in name else "hyphen" if "hyphen" in name else None
+            if not is_seq or not kind or name.endswith(".head"):
+                continue
+            width = self.hmtx[name][0]
+            path = path_of(name)
+            grown = False
+            for y0, y1 in bar_ys[kind]:
+                # 境界の手前 60〜100 の区間を横線が埋めていれば、右へつながる線とみなす
+                probe = pathops.op(path, rect(width - 100, y0, width - 60, y1), pathops.PathOp.INTERSECTION)
+                if probe.area >= 0.98 * 40 * (y1 - y0):
+                    path = pathops.op(path, rect(width - 100, y0, width + 10, y1), pathops.PathOp.UNION)
+                    grown = True
+            if grown:
+                self.replace_path(name, path)
 
     # ---- Texture Healing / Smart Kerning ----
 

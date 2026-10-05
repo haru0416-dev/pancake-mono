@@ -685,6 +685,7 @@ class Builder:
         self.add_symbols()
         self.add_joins()
         self.add_healing()
+        self.split_arrow_bars()
 
         self.font.setGlyphOrder(self.order)
         self.glyf.glyphOrder = self.order
@@ -741,6 +742,82 @@ class Builder:
                     seen.add(key)
             if lines:
                 self.fea[tag] = lines
+
+    # ---- 無限矢印の横線 ----
+
+    def split_arrow_bars(self):
+        """無限矢印の部品のうち矢じりや縦棒を含むものを、横線の帯だけのグリフと残りのグリフに分ける。
+        ヒンティングはグリフごとに丸めるので、横線と矢じりが 1 つの輪郭だと、矢じりの端に引かれて
+        横線だけが隣の = や - の部品と 1px ずれる(Maple Mono issue #508)。横線だけのグリフは
+        = や - の部品と同じ高さに丸まる。残りは送り幅 0 の .head にして、calt の最後で後ろに足す"""
+        gs = self.font.getGlyphSet()
+
+        def path_of(name):
+            rec = DecomposingRecordingPen(gs)
+            gs[name].draw(rec)
+            path = pathops.Path()
+            rec.replay(path.getPen())
+            return path
+
+        def rect(x0, y0, x1, y1):
+            path = pathops.Path()
+            pen = path.getPen()
+            pen.moveTo((x0, y0)); pen.lineTo((x1, y0)); pen.lineTo((x1, y1)); pen.lineTo((x0, y1)); pen.closePath()
+            return path
+
+        def union(paths):
+            out = pathops.Path()
+            for p in paths:
+                out = pathops.op(out, p, pathops.PathOp.UNION)
+            return out
+
+        # 横線の帯は、ウェイトごとに = と - の中間の部品の輪郭から取る
+        bands, reach = {}, {}
+        for kind in ("equal", "hyphen"):
+            ys = sorted((round(c.bounds[1]), round(c.bounds[3])) for c in path_of(f"{kind}.mid.seq").contours)
+            bands[kind] = union(rect(-2000, y0, 2000, y1) for y0, y1 in ys)
+            reach[kind] = min(y1 - y0 for y0, y1 in ys) / 2
+        pure = {f"{k}.{p}.seq" for k in bands for p in ("sta", "mid", "end")}
+        rules = []
+        for name in list(self.order):
+            is_seq = name.endswith(".seq") or ".seq." in name  # .seq.cv01 などの切り替え後の字形も含む
+            if not is_seq or name in pure:
+                continue
+            kind = "equal" if "equal" in name else "hyphen" if "hyphen" in name else None
+            if not kind:
+                continue
+            whole = path_of(name)
+            bars = pathops.op(whole, bands[kind], pathops.PathOp.INTERSECTION)
+            if name.startswith("bar_"):
+                # 縦棒は切らずに残りの側へまとめる(横線のグリフからは縦棒の幅の分を抜く)
+                rest = pathops.op(whole, bands[kind], pathops.PathOp.DIFFERENCE)
+                x0, _, x1, _ = rest.bounds
+                bars = pathops.op(bars, rect(x0, -2000, x1, 2000), pathops.PathOp.DIFFERENCE)
+            rest = pathops.op(whole, bars, pathops.PathOp.DIFFERENCE)
+            if not list(rest.contours) or not list(bars.contours):
+                continue
+            # 矢じりの切れ端は丸めで 1px ずれることがあるので、横線の太さの半分まで線の中へ伸ばして、
+            # つなぎ目が線に隠れるようにする(元の輪郭の内側だけを足すので、字形は変わらない)
+            d = reach[kind]
+            grown = [rest]
+            for dy in (-d, -d / 2, d / 2, d):
+                moved = pathops.Path()
+                rest.draw(TransformPen(moved.getPen(), (1, 0, 0, 1, 0, dy)))
+                grown.append(moved)
+            rest = pathops.op(union(grown), whole, pathops.PathOp.INTERSECTION)
+            width = self.hmtx[name][0]
+            shifted = pathops.Path()
+            rest.draw(TransformPen(shifted.getPen(), (1, 0, 0, 1, -width, 0)))
+            self.replace_path(name, bars)
+            self.store_path(f"{name}.head", shifted, 0)
+            rules.append(f"sub {name} by {name} {name}.head;")
+        gdef = self.font["GDEF"].table if "GDEF" in self.font else None
+        if gdef and gdef.GlyphClassDef:
+            for r in rules:
+                gdef.GlyphClassDef.classDefs[r.split()[-1].rstrip(";")] = 1
+        # calt の他の規則で部品が決まったあとに分けるため、最後の lookup にする
+        self.fea_tail += ["lookup arrow_split {", *[f"  {r}" for r in rules], "} arrow_split;",
+                          "feature calt { lookup arrow_split; } calt;"]
 
     # ---- Texture Healing / Smart Kerning ----
 

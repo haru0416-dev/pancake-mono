@@ -147,6 +147,21 @@ def check(path, prop=False):
         if not any(n.endswith(".seq") for n in arrow_seq):
             errors.append(f"無限矢印リガチャが効いていない: {arrow_seq}")
         gs = f.getGlyphSet()
+        # 矢じりを横線と別のグリフに分けてあるか(Maple Mono issue #508 の横線のずれ)
+        for text in ("==>", "<--", "|=>", "=<="):
+            names = shape(face, text)[0]
+            heads = [n for n in names if n.endswith(".head")]
+            if not heads:
+                errors.append(f"{text} の矢じりが横線と分かれていない: {names}")
+            elif any(hmtx[n][0] != 0 for n in heads):
+                errors.append(f"{text} の矢じりのグリフに幅がある: {[(n, hmtx[n][0]) for n in heads]}")
+        bars = BoundsPen(gs)
+        gs["equal.mid.seq"].draw(bars)
+        for name in ("greater_equal.end.seq", "less_equal.sta.seq"):
+            b = BoundsPen(gs)
+            gs[name].draw(b)
+            if (round(b.bounds[1]), round(b.bounds[3])) != (round(bars.bounds[1]), round(bars.bounds[3])):
+                errors.append(f"{name} の横線の帯が = の部品と違う: {b.bounds} / {bars.bounds}")
 
         def thick(ch):
             b = BoundsPen(gs)
